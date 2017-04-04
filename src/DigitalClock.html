@@ -1,0 +1,23 @@
+<span>{{hour}} : {{minute}} : {{second}}</span>
+<script>
+export default {
+  data() {
+    return {
+      time: new Date()
+    };
+  },
+  oncreate() {
+    this.interval = setInterval(() => {
+      this.set({time: new Date()});
+    }, 1000 / 32);
+  },
+  ondestroy() {
+    clearInterval(this.interval);
+  },
+  computed: {
+    hour: time => ('0' + time.getHours()).slice(-2),
+    minute: time => ('0' + time.getMinutes()).slice(-2),
+    second: time => ('0' + time.getSeconds()).slice(-2),
+  }
+}
+</script>
