@@ -1,0 +1,64 @@
+<img src={{src}} width={{width}} height={{height}}>
+<style>
+@font-face{font-family:"Yu Gothic";src:local("Yu Gothic Medium");font-weight:100}
+@font-face{font-family:"Yu Gothic";src:local("Yu Gothic Medium");font-weight:200}
+@font-face{font-family:"Yu Gothic";src:local("Yu Gothic Medium");font-weight:300}
+@font-face{font-family:"Yu Gothic";src:local("Yu Gothic Medium");font-weight:400}
+@font-face{font-family:"Yu Gothic";src:local("Yu Gothic Bold");font-weight:bold}
+@font-face{font-family:"Helvetica Neue";src:local("Helvetica Neue Regular");font-weight:100}
+@font-face{font-family:"Helvetica Neue";src:local("Helvetica Neue Regular");font-weight:200}
+</style>
+<script>
+export default {
+  data() {
+    return {
+      src: 'data:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+    };
+  },
+  oncreate() {
+    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+    const width = this.get('width'), height = this.get('height');
+    canvas.width = width;
+    canvas.height = height;
+    this.set({
+      width: width,
+      height: height
+    });
+
+    const x = width / 2, y = height / 2;
+    const text = width + ' x ' + height + '';
+
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    let font = '"-apple-system", "Helvetica Neue", "Yu Gothic", YuGothic, Verdana, Meiryo, "M+ 1p", sans-serif';
+    if (userAgent.match(/msie|trident/)) {
+      const ieVersion = userAgent.match(/(?:msie\s|rv:)([\d\.]+)/)[1];
+      if (parseInt(ieVersion, 10) >= 10) font = 'Verdana, Meiryo, sans-serif';
+    }
+
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = "18px " + font;
+
+    ctx.fillStyle = '#b3b3b3';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#336';
+    ctx.fillText(text, x, y);
+
+    if (canvas.toBlob) {
+      canvas.toBlob(blob => {
+        const imageURL = URL.createObjectURL(blob);
+        this.set({src: imageURL});
+      });
+    } else if (canvas.msToBlob) {
+      const blob = canvas.msToBlob();
+      const imageURL = URL.createObjectURL(blob);
+      this.set({src: imageURL});
+    } else {
+      const imageURL = canvas.toDataURL();
+      this.set({src: imageURL});
+    }
+  }
+};
+</script>
